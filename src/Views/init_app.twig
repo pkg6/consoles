@@ -1,0 +1,23 @@
+<?php
+
+namespace {{ namespace }};
+
+use Pkg6\Consoles\App;
+use Pkg6\Consoles\Scheduling\Schedule;
+
+class {{ app_class_name }} extends App
+{
+    /**
+     * 定义任务计划
+     * @param Schedule $schedule
+     * @return void
+     */
+    protected function schedule(Schedule $schedule)
+    {
+//        $schedule->command("schedule:list")->everyMinute();
+//        $schedule->exec("sleep 5")->everyMinute();
+//        $schedule->call(function(){
+//            file_put_contents("console-scheduling.log",time().PHP_EOL,FILE_APPEND);
+//        })->everyMinute();
+    }
+}

@@ -1,0 +1,35 @@
+{
+    "name": "pkg6/consoles",
+    "description": "Consoles is a versatile PHP CLI toolkit that works both as a standalone tool and as part of your project, featuring built-in task scheduling, Phar packaging, and more.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "zhiqiang",
+            "email": "zhiqiang2033@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Pkg6\\Consoles\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.2",
+        "ext-json": "*",
+        "dragonmantank/cron-expression": "^3.3",
+        "symfony/finder": "^5.4|^6.0",
+        "pkg6/console": "^0.1",
+        "twig/twig": "^2.0",
+        "pkg6/var-dumper": "^0.1"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.9"
+    },
+    "bin": [
+        "bin/consoles"
+    ],
+    "scripts": {
+        "fixer": "vendor/bin/php-cs-fixer fix"
+    }
+}
