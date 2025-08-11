@@ -1,0 +1,41 @@
+#!/usr/bin/env php
+<?php
+$file = null;
+$autoloadFile = [
+    __DIR__ . '/../../../autoload.php',
+    __DIR__ . '/../../vendor/autoload.php',
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/vendor/autoload.php',
+];
+foreach ($autoloadFile as $file) {
+    if (file_exists($file)) {
+        require $file;
+        break;
+    }
+}
+if (!file_exists($file)) {
+    die("include composer autoload.php fail\n");
+}
+const BASE_PATH = __DIR__;
+const CONSOLE_NAME = __FILE__;
+
+$appConsoleClass = [
+    \App\ConsoleCliApp::class
+];
+$console = new \Pkg6\Consoles\App();
+foreach ($appConsoleClass as $app) {
+    if (is_subclass_of($app, \Pkg6\Consoles\App::class)) {
+        $console = new $app;
+        break;
+    }
+}
+$needle = "--namespace=";
+foreach ($argv as $cmd) {
+    if (str_contains($cmd, $needle)) {
+        $cmd = str_replace($needle, "", $cmd);
+        if (class_exists($cmd)) {
+            $console = new $cmd();
+        }
+    }
+}
+$console->handle();

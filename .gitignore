@@ -1,0 +1,7 @@
+/vendor/
+/.idea/
+/app/
+/consoles
+/consoles.phar
+/*.phar
+/.php-cs-fixer.cache
