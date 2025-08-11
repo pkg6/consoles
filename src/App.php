@@ -22,6 +22,7 @@ use Pkg6\Consoles\Scheduling\ScheduleAppTrait;
 use Pkg6\Consoles\Scheduling\ScheduleListCommand;
 use Pkg6\Consoles\Scheduling\ScheduleRunCommand;
 use Pkg6\Consoles\Scheduling\ScheduleWorkCommand;
+use Pkg6\Consoles\Watch\WatchRunCommand;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -47,6 +48,9 @@ class App
         ScheduleWorkCommand::class,
 
         PharBuildCommand::class,
+
+        //监听目录
+        WatchRunCommand::class,
     ];
     /**
      * @var string|null
