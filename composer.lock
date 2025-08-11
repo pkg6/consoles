@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b1fceae98f5c4c6dce9022014c5de81f",
+    "content-hash": "37fce175e93c2d203432386ab5528f51",
     "packages": [
         {
             "name": "dragonmantank/cron-expression",
@@ -2550,6 +2550,38 @@
                 }
             ],
             "time": "2024-03-02T06:30:58+00:00"
+        },
+        {
+            "name": "swoole/ide-helper",
+            "version": "4.8.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swoole/ide-helper.git",
+                "reference": "d100c446b2e3d56430cbcab5dc3fa20a9f35c4ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/d100c446b2e3d56430cbcab5dc3fa20a9f35c4ef",
+                "reference": "d100c446b2e3d56430cbcab5dc3fa20a9f35c4ef",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Team Swoole",
+                    "email": "team@swoole.com"
+                }
+            ],
+            "description": "IDE help files for Swoole.",
+            "support": {
+                "issues": "https://github.com/swoole/ide-helper/issues",
+                "source": "https://github.com/swoole/ide-helper/tree/4.8.13"
+            },
+            "time": "2023-03-20T06:46:24+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
