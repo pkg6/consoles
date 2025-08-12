@@ -1,13 +1,16 @@
-# consoles
+# Consoles
 
-Consoles 是一个功能灵活的 PHP 命令行解决方案，既可作为独立的 CLI 工具使用，也可无缝集成到项目中。它内置了常用的命令行功能模块，如计划任务调度、Phar 打包等，帮助开发者高效构建与管理应用。
+Consoles 是一个功能强大且灵活的 PHP 命令行解决方案，既可作为独立的 CLI 工具使用，也可无缝集成到现有项目中。它内置了多种实用功能模块，包括计划任务调度、Phar 打包、文件监听等，帮助开发者高效构建与管理命令行应用。
 
 ## 项目特点
 
-- 简洁易用的命令行接口
-- 强大的计划任务调度系统（基于 cron 表达式）
-- 便捷的 Phar 打包功能
-- 良好的扩展性，可以轻松添加自定义命令
+- 简洁易用的命令行接口，基于 Symfony Console 组件
+- 强大的计划任务调度系统（基于 cron 表达式），支持并发执行
+- 便捷的 Phar 打包功能，轻松将项目打包成单个可执行文件
+- 智能的文件监听功能，支持文件变更时自动执行命令
+- 良好的扩展性，可以轻松添加自定义命令和功能
+- 支持依赖注入和服务容器，便于功能扩展和测试
+- 详细的日志记录和错误处理机制
 
 ## 安装
 
@@ -25,12 +28,37 @@ composer require pkg6/consoles
 
 ## 快速开始
 
-## 初始化项目
+### 初始化项目
 
-使用初始化命令快速创建一个新的 console.cli 项目：
+使用初始化命令快速创建一个新的 Consoles 项目：
 
 ```bash
-cd demo && consoles init
+# 创建项目目录
+mkdir my-console-app && cd my-console-app
+
+# 初始化项目
+consoles init
+```
+
+初始化成功后，项目结构如下：
+```
+my-console-app/
+├── app/
+│   └── ConsoleCliApp.php  # 应用入口类
+├── composer.json          # Composer 配置文件
+└── consoles               # 可执行脚本
+```
+
+### 运行应用
+
+初始化后，可以通过以下命令运行应用：
+
+```bash
+# 查看可用命令
+php consoles list
+
+# 运行特定命令
+php consoles [command-name]
 ```
 
 ## Phar 打包
@@ -79,99 +107,54 @@ consoles phar:build --path=/path/to/your/project --name=myapp --phar-version=1.0
 2. 项目必须已经安装了依赖（执行过 `composer install`）。
 3. 如果不指定 Phar 文件名称，将默认使用 `composer.json` 中的项目名称。
 
-## 计划任务和自定命令
+## 计划任务调度
 
-你可以轻松添加自定义命令到应用中。下面是创建和使用自定义命令的完整示例：
+Consoles 提供了强大的计划任务调度系统，可以基于 cron 表达式执行各种任务，包括命令、闭包函数和外部脚本。
 
-### 创建创建基础app类
+~~~shell
+#  列出所有的计划任务
+consoles schedule:list
 
-~~~php
-<?php
+# 执行计划任务（需要加入到系统定时任务中）
+consoles schedule:run
 
-namespace App;
-
-use Pkg6\Consoles\App;
-use Pkg6\Consoles\Scheduling\Schedule;
-
-class MyApp extends App
-{
-    protected function schedule(Schedule $schedule)
-    {
-        // 每分钟执行一次命令
-        $schedule->command('your:command')
-                 ->everyMinute();
-                  
-        // 每两分钟执行一次
-        $schedule->command('another:command')
-                 ->everyTwoMinutes();
-                  
-        // 每天凌晨 1 点执行
-        $schedule->exec('php script.php')
-                 ->dailyAt('01:00');
-                  
-        // 使用自定义 cron 表达式（每小时的第 15 分钟执行）
-        $schedule->call(function () {
-            // 执行一些操作
-            echo '任务执行成功';
-        })->cron('15 * * * *');
-    }
-}
-
-$app = new MyApp();
-$app->handle();
+# 执行计划任务
+consoles schedule:work
 ~~~
 
-### 创建命令类
+## 文件监听功能
 
-创建一个新的命令类：
+Consoles 提供了文件监听功能，可以监控指定目录的文件变化，并在文件变化时自动执行命令。
 
-```php
-<?php
+### 使用方法
 
-namespace App;
+```bash
+# 基本用法（监听当前目录，文件变化时执行指定命令）
+consoles watch:run --command="php consoles greeting"
 
-use Pkg6\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
+# 监听特定目录
+consoles watch:run --path=/path/to/directory --command="php consoles greeting"
 
-class GreetingCommand extends Command
-{
+# 排除某些文件或目录
+consoles watch:run --exclude=vendor/ --exclude=node_modules/ --command="php consoles greeting"
 
-    protected $name = 'greeting';
-    protected $description = 'greeting cmd';
-
-    protected function handle()
-    {
-        //TODO
-    }
-}
+# 指定监听引擎（默认使用 swoole）
+consoles watch:run --engine=swoole --command="php consoles greeting"
 ```
 
-> 可参考laravel命令行进行书写
+### 可用选项
 
-### 注册命令
+- `--path=PATH`: 要监听的目录路径，默认为当前目录。
+- `--exclude=EXCLUDE`: 要排除的文件或目录，可以多次指定。
+- `--command=COMMAND`: 文件变化时要执行的命令。
+- `--engine=ENGINE`: 监听引擎，默认为 'swoole'。
 
-在应用中注册自定义命令：
+### 示例：开发过程中自动测试
 
-```php
-<?php
-
-use App\MyApp;
-use App\Commands\GreetingCommand;
-
-// 创建应用实例
-$app = new MyApp();
-// 注册自定义命令
-$app->addCommand(GreetingCommand::class);
-
-// 运行应用
-$app->handle();
+```bash
+# 监听 src 目录下的文件变化，变化时执行测试命令
+consoles watch:run --path=src/ --command="vendor/bin/phpunit"
 ```
-
-### 使用命令
-
-~~~
-php consoles greeting
-~~~
 
 ## 贡献指南
 
